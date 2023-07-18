@@ -1,4 +1,5 @@
 # myrepo
+this project is tested.
 this project is used with local hardware attached to the local computer.
 the hardware(arduino based)is attached via serial port.
 two barcode scanners are also attached to the local pc.
