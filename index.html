@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        th {
+  cursor: pointer;
+}
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Full-width input fields */
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .xxx {
+            width: 100%;
+        }
+
+        /* Set a style for all buttons */
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* Extra styles for the cancel button */
+        .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+        }
+
+        /* Center the image and position the close button */
+        .imgcontainer {
+            text-align: center;
+            margin: 24px 0 12px 0;
+            position: relative;
+        }
+
+        img.avatar {
+            width: 40%;
+            border-radius: 50%;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%;
+            /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button (x) */
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 0;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes animatezoom {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+            span.psw {
+                display: block;
+                float: none;
+            }
+
+            .cancelbtn {
+                width: 100%;
+            }
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .myclass {
+            width: 5px;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #dddddd;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 140px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 5px 0;
+
+
+            position: absolute;
+            z-index: 1;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="demo">DoorStatus:</p>
+    <br>-----------------------------------</br>
+    <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+    <div id="id01" class="modal">
+        <form class="modal-content animate">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close"
+                    title="Close Modal">&times;</span>
+                <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+            </div>
+
+            <div class="container">
+                <label for="username"><b>Username</b></label>
+                <input id="username" type="text" placeholder="Enter Username" name="username" required>
+
+                <label for="password"><b>Password</b></label>
+                <input type="password" id="password" placeholder="Enter Password" name="password" required>
+
+                <button onclick="GetLog()">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'"
+                    class="cancelbtn">Cancel</button>
+                <span class="psw">Forgot <a href="#">password?</a></span>
+            </div>
+        </form>
+    </div>
+    </br>
+    <form id="OnOff" hidden>
+        <input type="radio" id="idle" name="mode" value="IDLE" onclick="LoadStatus(0)" />
+        <label for="idle">
+            <div class="tooltip">
+                Idle mode
+                <span class="tooltiptext"> Always open.</span>
+            </div>
+        </label><br />
+
+        <input type="radio" id="active" name="mode" value="ACTIVE" onclick="LoadStatus(1)" />
+        <label for="active">
+            <div class="tooltip">
+                Active mode
+                <span class="tooltiptext">
+                    Recording every in/out form the Hall.</span>
+            </div>
+        </label>
+        <br>
+        <label for="barcode">
+            <div class="tooltip">
+                Barcode
+            </div>
+        </label>
+        <input type="text" id="barcode" style="width:auto;" /></input>
+
+        <button onclick="Getin()" style="width:auto;">Get in</button>
+        <button onclick="GetOut()" style="width:auto;">Get out</button>
+    </form>
+    <table id="myTable">
+        <th class="myclass" onclick="sortTable(0)">Index</th>
+        <th  onclick="sortTable(1)">Employee</th>
+        <th onclick="sortTable(2)">Times</th>
+        <th onclick="sortTable(3)">Total time (Sec)</th>
+        <th  onclick="sortTable(4)">Status</th>
+    </table>
+    <button type="button" id="mybtm" onclick="alertc()">Cancel</button>
+    <p><a id="sum"></a></p>
+    <!-- <form id="input-form">
+        <label for="message">Enter Message:</label>
+        <input type="text" id="message" name="message"><br><br>
+        <input type="submit" value="Send">
+      </form> -->
+    <textarea id="messages" rows="10" cols="100%" onchange="scrollLogToBottom()"></textarea>
+    <script>
+        function scrollLogToBottom() {
+            logTa = document.getElementById("messages")
+            logTa.scrollTop = logTa.scrollHeight;
+        }
+        /********** Web socket *********/
+        const webSocket = new WebSocket('ws://192.168.1.131:453/');
+        webSocket.onmessage = (event) => {
+            ///console.log(event)
+            if (event.data != "NewRecorded") {
+                document.getElementById('messages').value +=
+                    'server: ' + event.data + '\n';
+                scrollLogToBottom();
+            }
+            else {
+                GetTheData();
+            }
+
+        };
+        webSocket.addEventListener("open", () => {
+            console.log("We are connected");
+        });
+        function sendMessage(event) {
+            var inputMessage = document.getElementById('message')
+            webSocket.send(inputMessage.value)
+            inputMessage.value = ""
+            event.preventDefault();
+        }
+        // document.getElementById('input-form').addEventListener('submit', sendMessage);
+        /********** Web socket *********/
+        function Getin() {
+            barcode = document.getElementById("barcode").value;
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+            }
+            xhttp.open("get", "/GetIn/" + barcode);
+            xhttp.send();
+        }
+        function GetOut() {
+            barcode = document.getElementById("barcode").value;
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+            }
+            xhttp.open("get", "/GetOut/" + barcode);
+            xhttp.send();
+        }
+        var i = 0;
+        var obj = [];
+        LoadStatus(2);//called to resresh page contents("/getstatus")
+        GetTheData();
+        function GetTheData() {
+            const xhttp = new XMLHttpRequest();
+
+            //fill the table with values              
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4)// && this.status == 200) 
+                {
+                    obj = (this.responseText.split(",").map(String));//convert text to array
+                    FillTable(obj);
+                }
+            }
+            xhttp.open("post", "/GetData");
+            xhttp.send();
+        }
+
+        ////////////////////////////////////////////////////////////////
+        function alertc() {
+            alert(document.cookie);
+        }
+        {
+            CheckCookie();
+        }
+
+        function CheckCookie() {
+
+            if ((document.cookie.length) > 0) {
+
+                document.getElementById("OnOff").removeAttribute('hidden');
+                setTimeout(CheckCookie, 1000);
+            }
+            else {
+                document.getElementById("OnOff").setAttribute('hidden', true);
+                const xhtp = new XMLHttpRequest();
+                xhtp.open("get", "/");
+                xhtp.send();
+            }
+            console.log((document.cookie.length));
+        }
+        console.log(typeof (document.cookie));
+
+        function GetLog() {
+            username = document.getElementById("username").value;
+            psw = document.getElementById("password").value;
+            const xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.readyState.toString());
+                    console.log(this.responseText);
+                }
+            }
+            xhttp.open("post", "/login?" + "username=" + username + "&password=" + psw);
+            xhttp.send();
+        }
+        function Fetch() {
+            //fetch()
+            username = document.getElementById("username").value;
+            psw = document.getElementById("password").value;
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.readyState.toString());
+                    console.log(this.responseText);
+                }
+            }
+            xhttp.open("post", "/login?" + "username=" + username + "&password=" + psw);
+            xhttp.send();
+        }
+        function FillTable(obj) {
+            let sum = 0;
+            while (i < obj.length) {
+                sum += Number(obj[i+2]);
+                var MytableRow = document.createElement("tr");
+
+                var MytableData = document.createElement("td");
+                var textnode = document.createTextNode((i) / 4 + 1);
+                MytableData.appendChild(textnode);
+                MytableRow.appendChild(MytableData);
+                document.getElementById("myTable").appendChild(MytableRow);
+
+                MytableData.setAttribute("id", "MytableRowId");
+                for (let j = 0; j < 4; j++) {
+
+                    var MytableData = document.createElement("td");
+                    var textnode = document.createTextNode(obj[i]);
+                    MytableData.appendChild(textnode);
+                    MytableRow.appendChild(MytableData);
+
+                    document.getElementById("myTable").appendChild(MytableRow);
+                    if (i % 4 == 0)
+                        MytableData.addEventListener("click", myFunction);
+                    i++;
+                }
+            }
+            document.getElementById("sum").innerHTML = Math.round(sum)/3600;
+        };
+        // ✅ Or create a reusable function
+        function padTo2Digits(num) {
+            return num.toString().padStart(2, '0');
+        }
+        function convertMsToTime(milliseconds) {
+            let seconds = Math.floor(milliseconds / 1000);
+            let minutes = Math.floor(seconds / 60);
+            let hours = Math.floor(minutes / 60);
+
+            seconds = seconds % 60;
+            minutes = minutes % 60;
+
+            // 👇️ If you don't want to roll hours over, e.g. 24 to 00
+            // 👇️ comment (or remove) the line below
+            // commenting next line gets you `24:00:00` instead of `00:00:00`
+            // or `36:15:31` instead of `12:15:31`, etc.
+            hours += 2;
+
+            hours = hours % 24;
+
+            return `${padTo2Digits(hours)}:${padTo2Digits(minutes)}:${padTo2Digits(
+                seconds,
+            )}`;
+        }
+        function GetReport(barcode) {
+            const xhttp = new XMLHttpRequest();
+            var obj = [];
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    //alert(this.responseText + '\n\r' + "lkjjjlk");
+                    obj = (this.responseText.split(",").map(String));//convert text to array
+                    let outCount = Number(obj[0]);
+                    let inCount = Number(obj[1]);
+                    let txt1 = "GetInTimestamps:\n";
+                    let txt2 = "GetOutTimestamps:\n";
+                    if (outCount > 0) {
+                        for (var i = 0; i < outCount; i++)
+                            if (obj[i + 2] != 0)
+                                txt2 += convertMsToTime(obj[i + 2]) + "\n"
+                    }
+
+                    if (inCount > 0)
+                        for (var i = 0; i < inCount; i++)
+                            if (obj[i + 2 + outCount] != 0)
+                                txt1 += convertMsToTime(obj[i + 2 + outCount]) + "\n"
+                    //txt1+="=================" 
+
+                    alert(barcode + ":  " + obj[obj.length - 1] + "\n" + txt1 + txt2)
+                    //console.log(obj[obj.length-1])
+
+                }
+            }
+            xhttp.open("post", "/GetReport?" + "barcode=" + barcode);
+            xhttp.send();
+        }
+        function myFunction() {
+            //alert("sdas")
+            console.log(this.innerHTML);
+            GetReport(this.innerHTML);
+        }
+        function LoadStatus(x) {
+            const xhr = new XMLHttpRequest();
+            if (x == 0) {
+                xhr.open("GET", "/Idle", true);//switch to idle mode
+            } else if (x == 1) {
+                xhr.open("GET", "/active", true);//switch to active mode
+            }
+            else {
+                xhr.open("GET", "/status", true);//get the actual status
+            }
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    switch (this.responseText) {
+                        case "0":// 	NACK_Idle:0,
+                            document.getElementById("idle").removeAttribute('checked');
+                            //alert("Refused...Airshower is busy!!!");
+                            break;
+                        case "1":// ACK_Idle:1,
+                            //alert("Switched to Idle mode");
+                            document.getElementById("demo").innerHTML = "Idle mode";
+                            document.getElementById("idle").setAttribute('checked', true);
+                            break;
+                        case "2":// NACK_active:2,
+                            document.getElementById("active").removeAttribute('checked');
+                            //alert("Refused...Airshower is busy!!!");
+                            break;
+                        case "3":// ACK_active:3,
+
+                            //alert("Switched to Active mode");
+                            document.getElementById("demo").innerHTML = "Active mode";
+                            document.getElementById("active").setAttribute('checked', true);
+                            break;
+                    }
+                }
+            };
+            xhr.send();
+        }
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("myTable");
+            switching = true;
+            //Set the sorting direction to ascending:
+            dir = "asc";
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+                //start by saying: no switching is done:
+                switching = false;
+                rows = table.rows;
+                /*Loop through all table rows (except the
+                first, which contains table headers):*/
+                for (i = 1; i < (rows.length - 1); i++) {
+                    //start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /*Get the two elements you want to compare,
+                    one from current row and one from the next:*/
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    /*check if the two rows should switch place,
+                    based on the direction, asc or desc:*/
+                    if (dir == "asc") {
+                        if (Number(x.innerHTML) >Number(y.innerHTML)) {
+                            //if so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (Number(x.innerHTML) <Number(y.innerHTML)) {
+                            //if so, mark as a switch and break the loop:
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    /*If a switch has been marked, make the switch
+                    and mark that a switch has been done:*/
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    //Each time a switch is done, increase this count by 1:
+                    switchcount++;
+                } else {
+                    /*If no switching has been done AND the direction is "asc",
+                    set the direction to "desc" and run the while loop again.*/
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }             
+    </script>
+</body>
+
+</html>
